@@ -7,6 +7,19 @@ categoryRouter.get("/", async (req, res) => {
   return res.status(200).json(categories);
 });
 
+categoryRouter.get("/:id",  (req, res) => {
+  const catId = req.params.id;
+
+  const category = Category.findById(catId);
+
+    category.then((cat) => {
+        if (cat) return res.status(200).json(cat)
+        return res.status(404).json({error: `could not find the category with the id ${catId}`})
+    }).catch((err) => {
+      return res.status(400).json({error: err})
+  });
+});
+
 categoryRouter.post("/", async (req, res) => {
   let category = new Category({
     name: req.body.name,
