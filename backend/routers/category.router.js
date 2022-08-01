@@ -1,11 +1,11 @@
-const { Category } = require('../models/category.schema');
+const { Category } = require("../models/category.schema");
 const categoryRouter = require("express").Router();
 
 categoryRouter.get("/", async (req, res) => {
-    const categories = await Category.find();
+  const categories = await Category.find();
 
-    return res.status(200).json(categories);
-})
+  return res.status(200).json(categories);
+});
 
 categoryRouter.post("/", async (req, res) => {
   let category = new Category({
@@ -23,5 +23,18 @@ categoryRouter.post("/", async (req, res) => {
   });
 });
 
-
+categoryRouter.delete("/:id", (req, res) => {
+  const categoryId = req.params.id;
+  const category = Category.findByIdAndRemove(categoryId)
+    .then((cat) => {
+      if (cat)
+        return res
+          .status(204)
+          .json({ success: true, message: `sucessfully deleted the category with id ${categoryId}` });
+      return res.status(404).json({ success: false, message: `unable to find the category with id ${categoryId}` });
+    })
+    .catch((err) => {
+      res.status(400).json({ success: false, error: err });
+    });
+});
 module.exports = categoryRouter;
