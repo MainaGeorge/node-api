@@ -11,8 +11,10 @@ const categorySchema = mongoose.Schema({
   color: {
     type: String,
   },
+  image: {
+    type: String,
+  },
 });
-
 
 //export a model created from the schema
 exports.Category = mongoose.model("Category", categorySchema);
